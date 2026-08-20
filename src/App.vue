@@ -46,14 +46,13 @@ export default {
     // restore side bar width
     this.restoreSideBarWidth();
   },
-  components: {Aside, Tabs, UpdateCheck},
+  components: { Aside, Tabs, UpdateCheck },
   methods: {
     bindSideBarDrag() {
       const that = this;
       const dragPointer = document.getElementById('drag-resize-pointer');
 
-      function mousemove(e)
-      {
+      function mousemove(e) {
         const mouseX = e.x;
         const dragSideWidth = mouseX - 17;
 
@@ -62,8 +61,7 @@ export default {
         }
       }
 
-      function mouseup(e)
-      {
+      function mouseup(e) {
         document.documentElement.removeEventListener('mousemove', mousemove);
         document.documentElement.removeEventListener('mouseup', mouseup);
 
@@ -79,7 +77,7 @@ export default {
       });
     },
     restoreSideBarWidth() {
-      let sideWidth = localStorage.sideWidth;
+      const { sideWidth } = localStorage;
       sideWidth && (this.sideWidth = sideWidth);
     },
   },
@@ -101,7 +99,7 @@ html {
 }
 body {
   height: 100%;
-  padding: 8px;
+  padding: 8px 6px 8px 6px;
   margin: 0;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
@@ -235,5 +233,19 @@ li .list-index {
 
 @keyframes rotate {
   to{ transform: rotate(360deg); }
+}
+
+/*vxe-table dark-mode color*/
+html .dark-mode {
+  --vxe-ui-table-header-background-color: #273239 !important;
+  --vxe-ui-layout-background-color: #273239 !important;
+  --vxe-ui-table-row-striped-background-color: #3b4b54 !important;
+  --vxe-ui-table-row-hover-background-color: #3b4b54 !important;
+  --vxe-ui-table-row-hover-striped-background-color: #50646f !important;
+  /*border color*/
+  --vxe-ui-table-border-color: #7f8ea5 !important;
+  /*font color*/
+  --vxe-ui-font-color: #f3f3f4 !important;
+  --vxe-ui-table-header-font-color: #f3f3f4 !important;
 }
 </style>

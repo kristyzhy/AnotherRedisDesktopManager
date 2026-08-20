@@ -10,7 +10,7 @@
         :title="$t('message.click_enter_to_rename')"
         placeholder="KeyName">
         <span slot="prepend" class="key-detail-type">{{ keyType }}</span>
-        <i class="el-icon-check el-input__icon cursor-pointer"
+        <i class="fa fa-check el-input__icon cursor-pointer"
           slot="suffix"
           :title="$t('message.click_enter_to_rename')"
           @click="renameKey">
@@ -27,13 +27,13 @@
         :title="$util.leftTime(keyTTL)">
         <span slot="prepend">TTL</span>
         <!-- remove expire -->
-        <i class="el-icon-close el-input__icon cursor-pointer"
+        <i class="fa fa-history el-input__icon cursor-pointer"
           slot="suffix"
-          :title="$t('message.persist')"
-          @click="persistKet">
+          :title="$t('message.persist')+', -1'"
+          @click="persistKey">
         </i>
         <!-- save ttl -->
-        <i class="el-icon-check el-input__icon cursor-pointer"
+        <i class="fa fa-check el-input__icon cursor-pointer"
           slot="suffix"
           :title="$t('message.click_enter_to_ttl')"
           @click="ttlKey">
@@ -68,7 +68,7 @@
 
       <!-- dump btn -->
       <el-button ref='dumpBtn' type="primary" @click="dumpCommand" icon="fa fa-code" :title="$t('message.dump_to_clipboard')"></el-button>
-    </div>  
+    </div>
   </div>
 </template>
 
@@ -87,16 +87,16 @@ export default {
   methods: {
     initShow() {
       const key = this.redisKey;
-      const client = this.client;
+      const { client } = this;
 
       // reset name input
       this.keyName = key;
-      this.binary  = !this.$util.bufVisible(key);
+      this.binary = !this.$util.bufVisible(key);
 
       client.ttl(key).then((reply) => {
         this.keyTTL = reply;
-      }).catch(e => {
-        this.$message.error('TTL Error: ' + e.message);
+      }).catch((e) => {
+        this.$message.error(`TTL Error: ${e.message}`);
       });
     },
     changeKeyInput(keyInput) {
@@ -129,25 +129,24 @@ export default {
         this.$t('message.confirm_to_delete_key', { key: this.$util.bufToString(this.redisKey) }),
         { type: 'warning' },
       )
-      .then(() => {
-        this.client.del(this.redisKey).then((reply) => {
-          if (reply == 1) {
-            this.$message.success({
-              message: this.$t('message.delete_success'),
-              duration: 1000,
-            });
+        .then(() => {
+          this.client.del(this.redisKey).then((reply) => {
+            if (reply == 1) {
+              this.$message.success({
+                message: this.$t('message.delete_success'),
+                duration: 1000,
+              });
 
-            this.$bus.$emit('removePreTab');
-            this.refreshKeyList(this.redisKey);
-          }
-          else {
-            this.$message.error({
-              message: `${this.redisKey} ${this.$t('message.delete_failed')}`,
-              duration: 1000,
-            });
-          }
-        }).catch(e => {this.$message.error(e.message);});
-      }).catch(() => {});
+              this.$bus.$emit('removePreTab');
+              this.refreshKeyList(this.redisKey);
+            } else {
+              this.$message.error({
+                message: `${this.redisKey} ${this.$t('message.delete_failed')}`,
+                duration: 1000,
+              });
+            }
+          }).catch((e) => { this.$message.error(e.message); });
+        }).catch(() => {});
     },
     renameKey(e) {
       // input blur to prevent trigger twice by enter
@@ -157,12 +156,18 @@ export default {
         return;
       }
 
-      this.$confirm(
-          this.$t('message.confirm_to_rename_key', {
-            old: this.$util.bufToString(this.redisKey),
-            new: this.$util.bufToString(this.keyName),
-          }),
-          { type: 'warning' },
+      const inputTxt = 'y';
+      const placeholder = this.$t('message.flushdb_prompt', { txt: inputTxt });
+
+      // force confirm rename operation
+      this.$prompt(
+        this.$t('message.confirm_to_rename_key', {
+          old: this.$util.bufToString(this.redisKey),
+          new: this.$util.bufToString(this.keyName),
+        }), {
+          inputValidator: value => ((value == inputTxt) ? true : placeholder),
+          inputPlaceholder: placeholder,
+        }
       ).then(() => {
         this.client.rename(this.redisKey, this.keyName).then((reply) => {
           if (reply === 'OK') {
@@ -175,24 +180,28 @@ export default {
             this.refreshKeyList(this.keyName, 'add');
             this.$bus.$emit('clickedKey', this.client, this.keyName);
           }
-        }).catch(e => {
-          this.$message.error('Rename Error: ' + e.message);
+        }).catch((e) => {
+          this.$message.error(`Rename Error: ${e.message}`);
         });
       }).catch(() => {});
     },
     ttlKey() {
+      // -1 persist key
+      if (this.keyTTL == -1) {
+        return this.persistKey();
+      }
+
       // ttl <= 0
       if (this.keyTTL <= 0) {
         this.$confirm(
           this.$t('message.ttl_delete'),
           { type: 'warning' },
         )
-        .then(() => {
-          this.setTTL(true);
-        })
-        .catch(() => {});
-      }
-      else {
+          .then(() => {
+            this.setTTL(true);
+          })
+          .catch(() => {});
+      } else {
         this.setTTL();
       }
     },
@@ -209,16 +218,16 @@ export default {
             this.$bus.$emit('removePreTab');
           }
         }
-      }).catch(e => {
-        this.$message.error('Expire Error: ' + e.message);
+      }).catch((e) => {
+        this.$message.error(`Expire Error: ${e.message}`);
       });
     },
-    persistKet() {
+    persistKey() {
       this.client.persist(this.redisKey).then(() => {
         this.initShow();
         this.$message.success(this.$t('message.modify_success'));
-      }).catch(e => {
-        this.$message.error('Persist Error: ' + e.message);
+      }).catch((e) => {
+        this.$message.error(`Persist Error: ${e.message}`);
       });
     },
     refreshKeyList(key, type = 'del') {
@@ -270,14 +279,14 @@ export default {
 
   .key-header-item.key-name-input {
     width: calc(100% - 402px);
-    min-width: 220px;
+    min-width: 218px;
     max-width: 800px;
     margin-right: 15px;
     margin-bottom: 10px;
   }
   .key-header-item.key-ttl-input {
-    width: 220px; 
-    margin-right: 15px; 
+    width: 218px;
+    margin-right: 15px;
     margin-bottom: 10px;
   }
   /*hide number input button*/

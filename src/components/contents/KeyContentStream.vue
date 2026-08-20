@@ -1,32 +1,33 @@
 <template>
-  <div>
+  <div class="key-content-stream">
+    <!-- table toolbar -->
     <div>
       <el-form :inline="true">
         <el-form-item>
           <!-- add button -->
           <el-button type="primary" @click='showEditDialog({id:"*"})'>{{ $t('message.add_new_line') }}</el-button>
           <!-- groups info -->
-          <el-button type='primary' @click="initGroups">Groups</el-button>
+          <el-button type="primary" @click="initGroups">Groups</el-button>
         </el-form-item>
         <!-- max value -->
         <el-form-item label="Max">
-          <el-input v-model="maxId" @keyup.enter.native='initShow' type="primary" placeholder='Max ID, default +' :title='$t("message.enter_to_search")' size='mini'>Max</el-input>
+          <el-input v-model="maxId" @keyup.enter.native="initShow" type="primary" placeholder="Max ID, default +" :title='$t("message.enter_to_search")' size="mini">Max</el-input>
         </el-form-item>
         <!-- min value -->
         <el-form-item label="Min">
-          <el-input v-model="minId" @keyup.enter.native='initShow' type="primary" placeholder='Min ID, default -' :title='$t("message.enter_to_search")' size='mini'>Min</el-input>
+          <el-input v-model="minId" @keyup.enter.native="initShow" type="primary" placeholder="Min ID, default -" :title='$t("message.enter_to_search")' size="mini">Min</el-input>
         </el-form-item>
       </el-form>
 
       <!-- edit & add dialog -->
-      <el-dialog :title='dialogTitle' :visible.sync="editDialog" @open='openDialog' :close-on-click-modal='false'>
+      <el-dialog :title="dialogTitle" :visible.sync="editDialog" @open="openDialog" :close-on-click-modal="false">
         <el-form>
           <el-form-item label="ID">
-            <InputBinary :disabled='!!beforeEditItem.contentString' :content.sync="editLineItem.id"></InputBinary>
+            <InputBinary :disabled="!!beforeEditItem.contentString" :title="formatIdTime(editLineItem.id)" :content.sync="editLineItem.id"></InputBinary>
           </el-form-item>
 
           <el-form-item label="Value (JSON string)">
-            <FormatViewer :redisKey="redisKey" :dataMap="editLineItem" :disabled='!!beforeEditItem.contentString' ref='formatViewer' :content='editLineItem.contentString'></FormatViewer>
+            <FormatViewer :redisKey="redisKey" :dataMap="editLineItem" :disabled="!!beforeEditItem.contentString" ref="formatViewer" :content="editLineItem.contentString"></FormatViewer>
           </el-form-item>
         </el-form>
 
@@ -85,54 +86,42 @@
       </el-dialog>
     </div>
 
-    <!-- content table -->
-    <el-table
-      stripe
-      border
-      size='mini'
-      min-height=300
-      :data="lineData">
-      <el-table-column
-        type="index"
-        :label="'NO. (Total: ' + total + ')'"
-        sortable
-        width="150">
-      </el-table-column>
-      <el-table-column
-        prop="id"
-        sortable
-        resizable
-        label="ID"
-        >
-        <template slot-scope="scope">
-          <span>{{ $util.bufToString(scope.row.id) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="contentString"
-        resizable
-        show-overflow-tooltip
-        label="Value"
-        >
-      </el-table-column>
-
-      <el-table-column label="Operation">
-        <template slot="header" slot-scope="scope">
-          <input
-            class="el-input__inner key-detail-filter-value"
-            v-model="filterValue"
-            @keyup.enter='initShow()'
-            :placeholder="$t('message.key_to_search')"/>
-          <i :class='loadingIcon'></i>
-        </template>
-        <template slot-scope="scope">
-          <el-button type="text" @click="$util.copyToClipboard(JSON.stringify(scope.row.content))" icon="el-icon-document" :title="$t('message.copy')"></el-button>
-          <el-button type="text" @click="showEditDialog(scope.row)" icon="el-icon-view" :title="$t('message.detail')"></el-button>
-          <el-button type="text" @click="deleteLine(scope.row)" icon="el-icon-delete" :title="$t('el.upload.delete')"></el-button>
-          <el-button type="text" @click="dumpCommand(scope.row)" icon="fa fa-code" :title="$t('message.dump_to_clipboard')"></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- vxe table must get a container with a fixed height -->
+    <div class="content-table-container">
+      <vxe-table
+        ref="contentTable"
+        size="mini" max-height="100%" min-height="72px"
+        border="default" stripe show-overflow="title"
+        :scroll-y="{enabled: true}"
+        :row-config="{isHover: true, height: 34}"
+        :column-config="{resizable: true}"
+        :empty-text="$t('el.table.emptyText')"
+        :data="lineData">
+        <vxe-column type="seq" :title="'ID (Total: ' + total + ')'" width="150"></vxe-column>
+        <vxe-column field="id" title="ID" sortable>
+          <template v-slot="scope">
+            <span :title="formatIdTime(scope.row.id)">{{ scope.row.id }}</span>
+          </template>
+        </vxe-column>
+        <vxe-column field="contentString" title="Value" sortable></vxe-column>
+        <vxe-column title="Operate" width="166">
+          <template slot-scope="scope" slot="header">
+            <el-input size="mini"
+              :placeholder="$t('message.key_to_search')"
+              :suffix-icon="loadingIcon"
+              @keyup.native.enter='initShow()'
+              v-model="filterValue">
+            </el-input>
+          </template>
+          <template slot-scope="scope">
+            <el-button type="text" @click="$util.copyToClipboard(scope.row.contentString)" icon="el-icon-document" :title="$t('message.copy')"></el-button>
+            <el-button type="text" @click="showEditDialog(scope.row)" icon="el-icon-view" :title="$t('message.detail')"></el-button>
+            <el-button type="text" @click="deleteLine(scope.row)" icon="el-icon-delete" :title="$t('el.upload.delete')"></el-button>
+            <el-button type="text" @click="dumpCommand(scope.row)" icon="fa fa-code" :title="$t('message.dump_to_clipboard')"></el-button>
+          </template>
+        </vxe-column>
+      </vxe-table>
+    </div>
 
     <!-- load more content -->
     <div class='content-more-container'>
@@ -151,6 +140,7 @@
 <script>
 import FormatViewer from '@/components/FormatViewer';
 import InputBinary from '@/components/InputBinary';
+import { VxeTable, VxeColumn } from 'vxe-table';
 
 export default {
   data() {
@@ -161,7 +151,8 @@ export default {
       beforeEditItem: {},
       editLineItem: {},
       loadingIcon: '',
-      pageSize: 100,
+      pageSize: 200,
+      searchPageSize: 2000,
       loadMoreDisable: false,
       minId: '-',
       maxId: '+',
@@ -173,13 +164,24 @@ export default {
       consumersDict: {},
     };
   },
-  components: {FormatViewer, InputBinary},
+  components: { FormatViewer, InputBinary, VxeTable, VxeColumn },
   props: ['client', 'redisKey'],
   computed: {
     dialogTitle() {
-      return this.beforeEditItem.contentString ? this.$t('message.detail') :
-             this.$t('message.add_new_line');
+      return this.beforeEditItem.contentString ? this.$t('message.detail')
+        : this.$t('message.add_new_line');
     },
+  },
+  watch: {
+    lineData(newValue, oldValue) {
+      // this.$refs.contentTable.refreshScroll()
+      // scroll to bottom while loading more
+      if (oldValue.length && (newValue.length > oldValue.length)) {
+        setTimeout(() => {
+          this.$refs.contentTable && this.$refs.contentTable.scrollTo(0, 99999999);
+        }, 0);
+      }
+    }
   },
   methods: {
     initShow(resetTable = true) {
@@ -192,20 +194,20 @@ export default {
       this.initTotal();
     },
     listScan() {
-      let maxId = this.lastId.equals(Buffer.from('')) ?
-                  (this.maxId ? this.maxId : '+') :
-                  this.lastId;
+      const maxId = this.lastId.equals(Buffer.from(''))
+        ? (this.maxId ? this.maxId : '+')
+        : this.lastId;
       // +1 for padding the repeat
-      const pageSize = this.filterValue ? 500 :
-                      (this.lineData.length ? this.pageSize + 1 : this.pageSize);
+      const pageSize = this.filterValue ? this.searchPageSize
+        : (this.lineData.length ? this.pageSize + 1 : this.pageSize);
 
       this.client.xrevrangeBuffer([
         this.redisKey,
         maxId,
         this.minId ? this.minId : '-',
         'COUNT',
-        pageSize
-      ]).then(reply => {
+        pageSize,
+      ]).then((reply) => {
         if (!reply.length) {
           return this.loadingIcon = '';
         }
@@ -220,9 +222,9 @@ export default {
           return;
         }
 
-        let lineData = [];
+        const lineData = [];
 
-        for (let stream of reply) {
+        for (const stream of reply) {
           const streamId = stream[0];
           const flatDict = stream[1];
 
@@ -231,12 +233,11 @@ export default {
             continue;
           }
 
-          let content = {};
-          let line = {id: streamId, content: content, uniq: Math.random()};
+          const content = {};
+          const line = { id: streamId, content };
           // add key value map
-          for (var i = 0; i < flatDict.length; i+=2) {
-            content[this.$util.bufToString(flatDict[i])] =
-              this.$util.bufToString(flatDict[i+1]);
+          for (let i = 0; i < flatDict.length; i += 2) {
+            content[this.$util.bufToString(flatDict[i])] = this.$util.bufToString(flatDict[i + 1]);
           }
 
           line.contentString = JSON.stringify(line.content);
@@ -254,7 +255,8 @@ export default {
         this.oneTimeListLength += lineData.length;
         this.lineData = this.lineData.concat(lineData);
 
-        if (this.oneTimeListLength >= this.pageSize) {
+        // enough rows, or Redis returned fewer than requested (no more data)
+        if (this.oneTimeListLength >= this.pageSize || reply.length < pageSize) {
           this.loadingIcon = '';
           this.oneTimeListLength = 0;
           return;
@@ -265,7 +267,7 @@ export default {
         }
         // continue scanning until to pagesize
         this.listScan();
-      }).catch(e => {
+      }).catch((e) => {
         this.loadingIcon = '';
         this.$message.error(e.message);
       });
@@ -274,6 +276,17 @@ export default {
       this.client.xlen(this.redisKey).then((reply) => {
         this.total = reply;
       });
+    },
+    formatIdTime(id) {
+      try {
+        const ts = Number(String(id).split('-')[0]);
+        if (!ts) {
+          return id;
+        }
+        return new Date(ts).toLocaleString();
+      } catch (e) {
+        return id;
+      }
     },
     resetTable() {
       this.lineData = [];
@@ -287,16 +300,16 @@ export default {
       });
     },
     showEditDialog(row) {
-      this.editLineItem = row;
-      this.beforeEditItem = this.$util.cloneObjWithBuff(row);
+      this.editLineItem = this.$util.cloneObjWithBuff(row);
+      this.beforeEditItem = row;
       this.editDialog = true;
     },
     dumpCommand(item) {
       const lines = item ? [item] : this.lineData;
-      const params = lines.map(line => {
-        let command = `XADD ${this.$util.bufToQuotation(this.redisKey)} ${line.id} `;
-        
-        let dicts = [];
+      const params = lines.map((line) => {
+        const command = `XADD ${this.$util.bufToQuotation(this.redisKey)} ${line.id} `;
+
+        const dicts = [];
         for (const field in line.content) {
           dicts.push(this.$util.bufToQuotation(field), this.$util.bufToQuotation(line.content[field]));
         }
@@ -306,10 +319,10 @@ export default {
 
       // reverse: id asc order
       this.$util.copyToClipboard(params.reverse().join('\n'));
-      this.$message.success({message: this.$t('message.copy_success'), duration: 800});
+      this.$message.success({ message: this.$t('message.copy_success'), duration: 800 });
     },
     editLine() {
-      const afterId = this.editLineItem.id
+      const afterId = this.editLineItem.id;
       const afterValue = this.$refs.formatViewer.getContent();
 
       if (!afterId || !afterValue) {
@@ -320,21 +333,24 @@ export default {
         return this.$message.error(this.$t('message.json_format_failed'));
       }
 
-      let mapList = [];
-      let jsonObj = JSON.parse(afterValue);
+      const mapList = [];
+      const jsonObj = JSON.parse(afterValue);
 
-      for (let k in jsonObj) {
+      for (const k in jsonObj) {
         mapList.push(...[k, jsonObj[k]]);
       }
 
       this.client.xadd(
         this.redisKey,
         afterId,
-        mapList
+        mapList,
       ).then((reply) => {
         // reply is id
         if (reply) {
-          this.initShow();
+          // this.initShow(); // do not reinit, #786
+          const newLine = { id: reply, content: jsonObj, contentString: afterValue };
+          this.lineData.unshift(newLine);
+          this.total++;
           this.editDialog = false;
 
           this.$message.success({
@@ -342,18 +358,18 @@ export default {
             duration: 1000,
           });
         }
-      }).catch(e => {
+      }).catch((e) => {
         this.$message.error(e.message);
       });
     },
     deleteLine(row) {
       this.$confirm(
         this.$t('message.confirm_to_delete_row_data'),
-        {type: 'warning'}
+        { type: 'warning' },
       ).then(() => {
         this.client.xdel(
           this.redisKey,
-          row.id
+          row.id,
         ).then((reply) => {
           if (reply == 1) {
             this.$message.success({
@@ -362,7 +378,7 @@ export default {
             });
 
             // this.initShow(); // do not reinit, #786
-            this.$util.listSplice(this.lineData, row.uniq);
+            this.lineData.splice(this.lineData.indexOf(row), 1);
             this.total--;
           }
         });
@@ -375,7 +391,7 @@ export default {
       // show dialog
       this.groupsVisible = true;
 
-      this.client.call('XINFO', 'GROUPS', this.redisKey).then(reply => {
+      this.client.call('XINFO', 'GROUPS', this.redisKey).then((reply) => {
         this.groups = this.formatInfo(reply);
       });
     },
@@ -385,7 +401,7 @@ export default {
         return;
       }
 
-      this.client.call('XINFO', 'CONSUMERS', this.redisKey, row.name).then(reply => {
+      this.client.call('XINFO', 'CONSUMERS', this.redisKey, row.name).then((reply) => {
         this.$set(this.consumersDict, row.name, this.formatInfo(reply));
       });
     },
@@ -393,9 +409,9 @@ export default {
       this.$refs.groupsTable.toggleRowExpansion(row);
     },
     formatInfo(lines) {
-      const formatted= [];
+      const formatted = [];
 
-      for (let line of lines) {
+      for (const line of lines) {
         const dict = {};
 
         for (let j = 0; j < line.length - 1; j += 2) {
@@ -416,3 +432,12 @@ export default {
   },
 };
 </script>
+
+<style type="text/css">
+  /*key content table wrapper*/
+  /*less height due to stream top tools*/
+  .key-content-stream.key-content-container .content-table-container {
+    height: calc(100vh - 232px);
+    margin-top: 0px;
+  }
+</style>

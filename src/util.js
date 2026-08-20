@@ -90,29 +90,27 @@ export default {
     const phpSerialize = require('php-serialize');
 
     try {
-      phpSerialize.unserialize(str);
-      return true;
+      // phpSerialize.unserialize(str);
+      return phpSerialize.isSerialized(str.toString());
     } catch (e) {}
 
     return false;
   },
   isJavaSerialize(buf) {
     try {
-      const ObjectInputStream = require("java-object-serialization").ObjectInputStream;
+      const { ObjectInputStream } = require('java-object-serialization');
       const result = (new ObjectInputStream(buf)).readObject();
-      return typeof result == 'object';
-    }
-    catch (e) {
+      return typeof result === 'object';
+    } catch (e) {
       return false;
     }
   },
   isPickle(buf) {
     try {
-      const Parser = require('pickleparser').Parser;
+      const { Parser } = require('pickleparser');
       const result = (new Parser()).parse(buf);
       return !!result;
-    }
-    catch (e) {
+    } catch (e) {
       return false;
     }
   },
@@ -152,13 +150,13 @@ export default {
       const result = getData(buf);
 
       // fix #922 some str mismatch
-      if (result[0]) {
-        const firstEle = Object.values(result[0])[0];
-        if (firstEle < 1e-14 || firstEle.low) {
-          return false;
-        }
-      }
-      return true;
+      // if (result[0]) {
+      //   const firstEle = Object.values(result[0])[0];
+      //   if (firstEle < 1e-14 || firstEle.low) {
+      //     return false;
+      //   }
+      // }
+      return !!result;
     } catch (e) {}
 
     return false;
@@ -374,14 +372,6 @@ export default {
 
     return debounced;
   },
-  listSplice(lines, uniq, replacement = null) {
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].uniq === uniq) {
-        replacement ? lines.splice(i, 1, replacement) : lines.splice(i, 1);
-        break;
-      }
-    }
-  },
   randomString(len = 5) {
     return Math.random().toString(36).substr(-len);
   },
@@ -396,8 +386,6 @@ export default {
     URL.revokeObjectURL(blob);
   },
   arrayChunk(arr, size) {
-    return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
-      arr.splice(0, size)
-    );
+    return Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.splice(0, size));
   },
 };

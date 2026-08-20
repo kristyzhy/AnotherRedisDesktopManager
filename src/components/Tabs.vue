@@ -45,7 +45,9 @@ export default {
       tabs: [],
     };
   },
-  components: { Status, KeyDetail, CliTab, DeleteBatch, MemoryAnalysis, SlowLog },
+  components: {
+    Status, KeyDetail, CliTab, DeleteBatch, MemoryAnalysis, SlowLog,
+  },
   watch: {
     selectedTabName(value) {
       // for mousewheel toggle tabs
@@ -95,14 +97,12 @@ export default {
         return this.tabs = [];
       }
 
-      this.tabs = this.tabs.filter((tab) => {
-        return tab.client.options.connectionName != connectionName;
-      });
+      this.tabs = this.tabs.filter(tab => tab.client.options.connectionName != connectionName);
 
       // still tabs left, solve selecting which tab
       if (this.tabs.length) {
         // previous selected left, do not change
-        let filteredTab = this.tabs.filter(tab => tab.name == this.selectedTabName);
+        const filteredTab = this.tabs.filter(tab => tab.name == this.selectedTabName);
         !filteredTab.length && (this.selectedTabName = this.tabs[0].name);
       }
     });
@@ -133,18 +133,18 @@ export default {
     tabClick(tab, event) {
       this.$shortcut.setScope(this.selectedTabName);
 
-      if (tab.$children && tab.$children[0] && (typeof tab.$children[0].tabClick == 'function')) {
+      if (tab.$children && tab.$children[0] && (typeof tab.$children[0].tabClick === 'function')) {
         tab.$children[0].tabClick();
-      };
+      }
     },
     addStatusTab(client, tabName, newTab = true) {
       const newTabItem = {
         name: `status_${tabName}`,
         label: this.$util.cutString(tabName),
         title: tabName,
-        client: client,
+        client,
         component: 'status',
-      }
+      };
 
       this.addTab(newTabItem, newTab);
     },
@@ -153,9 +153,9 @@ export default {
         name: `cli_${tabName}_${Math.random()}`,
         label: this.$util.cutString(tabName),
         title: tabName,
-        client: client,
+        client,
         component: 'cli',
-      }
+      };
 
       this.addTab(newTabItem, newTab);
     },
@@ -164,10 +164,10 @@ export default {
         name: `del_batch_${tabName}_${Math.random()}`,
         label: this.$util.cutString(tabName),
         title: tabName,
-        client: client,
+        client,
         component: 'delbatch',
-        rule: rule,
-      }
+        rule,
+      };
 
       this.addTab(newTabItem, true);
     },
@@ -176,10 +176,10 @@ export default {
         name: `memory_analysis_${tabName}_${Math.random()}`,
         label: this.$util.cutString(tabName),
         title: tabName,
-        client: client,
+        client,
         component: 'memory',
-        pattern: pattern,
-      }
+        pattern,
+      };
 
       this.addTab(newTabItem, true);
     },
@@ -188,9 +188,9 @@ export default {
         name: `slowlog_${tabName}_${Math.random()}`,
         label: this.$util.cutString(tabName),
         title: tabName,
-        client: client,
+        client,
         component: 'slowlog',
-      }
+      };
 
       this.addTab(newTabItem, true);
     },
@@ -207,22 +207,27 @@ export default {
         }
 
         this.addTab(this.initKeyTabItem(client, key, type), newTab);
-      }).catch(e => {
-        this.$message.error('Type Error: ' + e.message);
+      }).catch((e) => {
+        this.$message.error(`Type Error: ${e.message}`);
       });
     },
     initKeyTabItem(client, key, type) {
-      const cutString = this.$util.cutString;
+      const { cutString } = this.$util;
       const dbIndex = client.condition ? client.condition.select : 0;
-      const connectionName = client.options.connectionName;
+      const { connectionName } = client.options;
       const keyStr = this.$util.bufToString(key);
 
       const label = `${cutString(keyStr)} | ${cutString(connectionName)} | DB${dbIndex}`;
-      const name  = `${keyStr} | ${connectionName} | DB${dbIndex}`;
+      const name = `${keyStr} | ${connectionName} | DB${dbIndex}`;
 
       return {
-        name: name, label: label, title: name, client: client, component: 'key',
-        redisKey: key, keyType: type,
+        name,
+        label,
+        title: name,
+        client,
+        component: 'key',
+        redisKey: key,
+        keyType: type,
       };
     },
     addTab(newTabItem, newTab = false) {
@@ -277,7 +282,7 @@ export default {
 
       const icon = map[component];
 
-      return icon ? icon : 'fa fa-key';
+      return icon || 'fa fa-key';
     },
     initShortcut() {
       this.$shortcut.bind('ctrl+w, ⌘+w', () => {
@@ -291,6 +296,21 @@ export default {
       const tabs = this.$refs.tabs.$el.querySelector('.el-tabs__header');
       tabs && tabs.addEventListener('contextmenu', this.openContextMenu);
       tabs && tabs.addEventListener('mousewheel', this.wheelToggleTabs);
+      tabs && tabs.addEventListener('mousedown', this.middleCloseTab);
+    },
+    middleCloseTab(event) {
+      // middle click to close tab
+      if (event.button === 1) {
+        event.preventDefault();
+        const items = this.$refs.tabs.$el.querySelectorAll('.el-tabs__header .el-tabs__item');
+
+        for (const item of items) {
+          if (item.contains(event.target)) {
+            const tabName = item.id.substr(4); // remove prefix "tab-"
+            tabName && this.removeTab(tabName);
+          }
+        }
+      }
     },
     wheelToggleTabs(event) {
       let index = this.tabs.findIndex(item => item.name === this.selectedTabName);
@@ -315,7 +335,7 @@ export default {
       }
 
       for (const item of items) {
-        if (item.contains(event.srcElement)) {
+        if (item.contains(event.target)) {
           this.preTabId = item.id.substr(4); // remove prefix "tab-"
         }
       }
@@ -330,17 +350,17 @@ export default {
       menu.style.top = `${event.clientY}px`;
       menu.style.display = 'block';
 
-      document.addEventListener("click", this.hideAllMenus, {once: true});
+      document.addEventListener('click', this.hideAllMenus, { once: true });
     },
     hideAllMenus() {
-      let menus = document.querySelectorAll('.tabs-context-menu');
+      const menus = document.querySelectorAll('.tabs-context-menu');
 
       if (menus.length === 0) {
         return;
       }
 
       for (const menu of menus) {
-        menu.style.display='none';
+        menu.style.display = 'none';
       }
     },
     removeOtherTabs(type = 'right') {
@@ -390,12 +410,11 @@ export default {
   /*height end*/
 
   .tab-content-wrappe {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 67px);
     overflow-x: hidden;
     overflow-y: auto;
     /*padding-left: 5px;*/
     padding-right: 8px;
-    padding-bottom: 20px;
   }
 
   /*tabs context menu*/

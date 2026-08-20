@@ -1,18 +1,16 @@
-<img align="right" width="120" src="https://cdn.jsdelivr.net/gh/qishibo/img/ano-square-icon-128.png">
-
 # Another Redis Desktop Manager
 
-<hr/>
+<img align="right" width="110" src="https://cdn.jsdelivr.net/gh/qishibo/img/ardm/202411081958294.png">
 
-🚀🚀🚀 更快、更好、更稳定的Redis桌面(GUI)管理客户端，兼容Windows、Mac、Linux，性能出众，轻松加载海量键值
+> 🚀🚀🚀 更快、更好、更稳定的Redis桌面(GUI)管理客户端，兼容Windows、Mac、Linux，性能出众，轻松加载海量键值
 
-[![MIT](https://img.shields.io/badge/license-MIT-000000.svg)](LICENSE)
-[![Download](https://img.shields.io/github/release/qishibo/AnotherRedisDesktopManager.svg?label=Download)](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
-[![Download Analysis](https://img.shields.io/badge/Download-Analysis-blue.svg)](https://qii404.me/github-release-statistics/?repo=/qishibo/AnotherRedisDesktopManager/)
-[![Weibo](https://img.shields.io/badge/Weibo-@shiboooo-blue.svg)](https://weibo.com/shiboooo?is_hot=1)
+<br>
+
+[![LICENSE](https://img.shields.io/github/license/qishibo/AnotherRedisDesktopManager)](LICENSE)
+[![Release](https://img.shields.io/github/release/qishibo/AnotherRedisDesktopManager.svg)](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
+[![Download](https://img.shields.io/github/downloads/qishibo/AnotherRedisDesktopManager/total)](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fqishibo%2FAnotherRedisDesktopManager.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fqishibo%2FAnotherRedisDesktopManager?ref=badge_shield)
-<a href="https://www.producthunt.com/posts/another-redis-desktop-manager?utm_source=badge-featured"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=340552&theme=dark" height="20" width="93" /></a>
-
+[![STARS](https://img.shields.io/github/stars/qishibo/AnotherRedisDesktopManager)](https://github.com/qishibo/AnotherRedisDesktopManager/)
 
 ## Windows
 
@@ -27,7 +25,7 @@
 - 可以在[github](https://github.com/qishibo/AnotherRedisDesktopManager/releases) 或者 [gitee](https://gitee.com/qishibo/AnotherRedisDesktopManager/releases)下载`AppImage`包，`chmod +x`, 双击运行
 - 或者通过**snap**: `sudo snap install another-redis-desktop-manager`
 **Tips**: 如果选择私钥时提示权限不足，执行`sudo snap connect another-redis-desktop-manager:ssh-keys`来获取对~/.ssh文件夹的权限
-<br/>[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/another-redis-desktop-manager)
+<br/>[![Get it from the Snap Store](https://cdn.jsdelivr.net/gh/qishibo/img/ardm/202411080845423.svg)](https://snapcraft.io/another-redis-desktop-manager)
 
 ## Mac
 
@@ -38,28 +36,47 @@
 - 或者通过App Store**赞助**, 然后让App Store帮你自动更新版本
 <br/>[![app store](https://cdn.jsdelivr.net/gh/qishibo/img/avail_app_store180.svg)](https://apps.apple.com/app/id1516451072)
 
-<!--
-> If **Mac** warning `Another Desktop Manager can't be opened because it is from an unidentified developer`. Open `Settings->Security` and click **`Open Anyway`**
-
-![can't be opened because it is from an unidentified developer](https://cdn.jsdelivr.net/gh/qishibo/img/1630655841115-mac-warning.png)
-
-![Settings->Security Open Anyway](https://cdn.jsdelivr.net/gh/qishibo/img/1630655842331-5d11c4feeaf6f.jpg)
--->
-
 
 ## 起飞!
 
-![redis status dark](https://cdn.jsdelivr.net/gh/qishibo/img/1630655843497-status.png)
+![redis status dark](https://cdn.jsdelivr.net/gh/qishibo/img/ardm/20260729160531924.png)
 
-![redis key hash dark](https://cdn.jsdelivr.net/gh/qishibo/img/1630655844559-str.png)
+![redis key dark](https://cdn.jsdelivr.net/gh/qishibo/img/ardm/20260729160542512.png)
 
-![redis console dark](https://cdn.jsdelivr.net/gh/qishibo/img/1630655846107-cli.png)
+![redis exec log](https://cdn.jsdelivr.net/gh/qishibo/img/ardm/20260729160550004.png)
 
-![redis exec log](https://cdn.jsdelivr.net/gh/qishibo/img/1630655847740-log.png)
+
+## 贡献者
+
+在这里感谢所有为此项目做出贡献的人.
+[![contributors](https://opencollective.com/AnotherRedisDesktopManager/contributors.svg?width=890&button=false)](https://github.com/qishibo/AnotherRedisDesktopManager/graphs/contributors)
+[![backers](https://opencollective.com/AnotherRedisDesktopManager/backers.svg)](https://opencollective.com/AnotherRedisDesktopManager)
+
+<!-- sponsors --><a href="https://github.com/brunoksato"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;brunoksato.png" width="60px" alt="Bruno Sato" /></a><a href="https://github.com/overtrue"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;overtrue.png" width="60px" alt="Zhengchao An" /></a><a href="https://github.com/wehnertb"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;wehnertb.png" width="60px" alt="Bill" /></a><a href="https://github.com/RobinTao"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;RobinTao.png" width="60px" alt="" /></a><a href="https://github.com/hfoxy"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;hfoxy.png" width="60px" alt="Harry Fox" /></a><a href="https://github.com/tandavaworks"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;tandavaworks.png" width="60px" alt="TandavaWorks" /></a><a href="https://github.com/BWICompanies"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;BWICompanies.png" width="60px" alt="BWI Companies, Inc." /></a><a href="https://github.com/dragonflydb"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;dragonflydb.png" width="60px" alt="DragonflyDB" /></a><a href="https://github.com/gauravn00b"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;gauravn00b.png" width="60px" alt="" /></a><a href="https://github.com/roostinghawk"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;roostinghawk.png" width="60px" alt="liuwei" /></a><a href="https://github.com/lb-xx"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;lb-xx.png" width="60px" alt="小新" /></a><a href="https://github.com/mikeallisonJS"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;mikeallisonJS.png" width="60px" alt="Mike Allison" /></a><a href="https://github.com/Yanni8"><img src="https://images.weserv.nl/?h=120&w=120&mask=circle&url=https:&#x2F;&#x2F;github.com&#x2F;Yanni8.png" width="60px" alt="Yannick Müller" /></a><!-- sponsors -->
+
+
+## 赞助
+
+- 给我点个Star⭐⭐
+- 通过 [OpenCollective](https://opencollective.com/AnotherRedisDesktopManager)或者[Github Sponsor](https://github.com/sponsors/qishibo)
+- 如果你是Mac用户, 也可以通过从[App Store](https://apps.apple.com/app/id1516451072)购买来赞助, 然后应用商店会为你自动更新
+<br>[![app store](https://cdn.jsdelivr.net/gh/qishibo/img/avail_app_store180.svg)](https://apps.apple.com/app/id1516451072)
+- 如果你是Windows用户，还可以通过从[Win Store](https://www.microsoft.com/store/apps/9MTD84X0JFHZ)购买来赞助，商店就会帮你自动更新
+<br>[![windows store](https://cdn.jsdelivr.net/gh/qishibo/img/windows-store-icon182-56.png)](https://www.microsoft.com/store/apps/9MTD84X0JFHZ)
+- 微信赞助码 [觉得好用，赞助一些大白兔🐇奶糖!]
+
+  <img width="150px" src="https://cdn.jsdelivr.net/gh/qishibo/img/202109031655807.jpeg" />
 
 
 ## 里程碑
 
+- 2026-08-15: TimeSeries\Vector\ARRAY类型支持 && 测试链接
+- 2026-07-29: 链接分组支持
+- 2025-10-01: 好久不见，新功能马上归来
+- 2024-11-03: 支持从文件批量导入命令并执行
+- 2024-10-07: Hash键值支持TTL(Redis>=7.4)
+- 2024-06-06: 搜索链接支持
+- 2024-04-10: DB自定义名称支持
 - 2024-02-21: Java/Pickle解码视图支持
 - 2024-02-15: STEAM支持查看群组和消费者
 - 2024-01-31: 好久不见! 命令行参数启动支持
@@ -81,7 +98,7 @@
 - 2021-02-03: 多选支持 && Msgpack视图支持
 - 2020-12-30: 树状列表
 - 2020-11-03: Binary视图 && SSH Passparse\Timeout 支持
-- 2020-09-04: SSH 集群支持 
+- 2020-09-04: SSH 集群支持
 - 2020-06-18: SSL/TLS 支持
 - 2020-04-28: 页面缩放 && 大键值Scan操作 && 自动Json
 - 2020-04-18: 不可见键值对支持
@@ -115,7 +132,7 @@ cd AnotherRedisDesktopManager
 npm install
 
 # if download electron failed during installing, use this command
-# ELECTRON_MIRROR="https://npm.taobao.org/mirrors/electron/" npm install
+# ELECTRON_MIRROR="https://npmmirror.com/mirrors/electron/" npm install
 
 # serve with hot reload at localhost:9988
 npm start
@@ -139,9 +156,6 @@ sudo apt install libfontconfig1-dev
 ### Windows
 
 ``` bash
-# install build tools for the first time, just execute once
-npm install -g windows-build-tools
-
 # clone code
 git clone https://github.com/qishibo/AnotherRedisDesktopManager.git --depth=1
 cd AnotherRedisDesktopManager
@@ -150,7 +164,7 @@ cd AnotherRedisDesktopManager
 npm install --platform=win32
 
 # if download electron failed during installing, use this command
-# npm config set ELECTRON_MIRROR http://npm.taobao.org/mirrors/electron/
+# npm config set ELECTRON_MIRROR https://npmmirror.com/mirrors/electron/
 # npm install --platform=win32
 
 # serve with hot reload at localhost:9988
@@ -181,26 +195,6 @@ npm run pack:linux
 ```
 
 
-## 赞助
-
-- 给我点个Star⭐⭐ 或者 [Producthunt](https://www.producthunt.com/posts/another-redis-desktop-manager)点个赞
-- 通过 [OpenCollective](https://opencollective.com/AnotherRedisDesktopManager)
-- 如果你是Mac用户, 也可以通过从[App Store](https://apps.apple.com/app/id1516451072)购买来赞助, 然后应用商店会为你自动更新
-<br>[![app store](https://cdn.jsdelivr.net/gh/qishibo/img/avail_app_store180.svg)](https://apps.apple.com/app/id1516451072)
-- 如果你是Windows用户，还可以通过从[Windows Store](https://www.microsoft.com/store/apps/9MTD84X0JFHZ)购买来赞助，商店就会帮你自动更新
-<br>[![windows store](https://cdn.jsdelivr.net/gh/qishibo/img/windows-store-icon182-56.png)](https://www.microsoft.com/store/apps/9MTD84X0JFHZ)
-- 微信赞助码 [觉得好用，赞助一些大白兔🐇奶糖!]
-
-  <img width="150px" src="https://cdn.jsdelivr.net/gh/qishibo/img/202109031655807.jpeg" />
-
-
-## 贡献者
-
-在这里感谢所有为此项目做出贡献的人.
-[![contributors](https://opencollective.com/AnotherRedisDesktopManager/contributors.svg?width=890&button=false)](https://github.com/qishibo/AnotherRedisDesktopManager/graphs/contributors)
-[![backers](https://opencollective.com/AnotherRedisDesktopManager/backers.svg)](https://opencollective.com/AnotherRedisDesktopManager)
-
-
 ## 自定义格式化
 
 > 当默认可视化方式不满足需求时，可以使用自定义脚本来格式化你的内容。
@@ -212,10 +206,10 @@ npm run pack:linux
 | ------ | ------ |
 | `Name` | 自定义名称 |
 | `Command` | 可执行命令，如`xxx.py` `xxx.js` `xxx.class`等，该文件需要具有可执行的`x`权限，可以通过形如`./xxx.py`方式执行；也可以直接用系统命令`/bin/node` `/bin/bash`等，此时需要把脚本路径放到Params里 |
-| `Params` | 拼接在`Command`后的参数，如"--key `{KEY}` --value `{VALUE}`"，其中`{KEY}`和`{VALUE}`在执行时会被替换成对应的Redis key和value。注意如果内容为二进制等不可见字符时，可以使用`{HEX}`代替`{VALUE}`，`{HEX}`会被替换成对应value的16进制即hex编码 |
+| `Params` | 拼接在`Command`后的参数，如"--key `{KEY}` --value `{VALUE}`"，其中`{KEY}`和`{VALUE}`在执行时会被替换成对应的Redis key和value。注意如果内容为二进制等不可见字符时，可以使用`{HEX}`，`{HEX}`会被替换成对应value的16进制即hex编码。如果HEX过长(>8000字符)时会被写入到临时文件，可以用`{HEX_FILE}`获取文件路径，脚本中自行读取即可 |
 
 ### 配置样例：
-> 脚本文件首行要增加env说明，最终执行的命令如: `./home/qii/pickle_decoder.py {HEX}`, 脚本中可以使用`argv[1]`接收参数，参考 [#978](https://github.com/qishibo/AnotherRedisDesktopManager/issues/987#issuecomment-1294844707)
+> 脚本文件首行一般要增加env说明，最终执行的命令如: `./home/qii/pickle_decoder.py {HEX}`, 脚本中可以使用`argv[1]`接收参数，参考 [#978](https://github.com/qishibo/AnotherRedisDesktopManager/issues/987#issuecomment-1294844707)
 
 | Command | Params |
 | ------ | ------ |
@@ -331,6 +325,6 @@ npm run pack:linux
 
 ## Support
 
-[goanother.com](https://goanother.com/) &nbsp; [Producthunt](https://www.producthunt.com/posts/another-redis-desktop-manager) &nbsp; [Weibo@shiboooo](https://weibo.com/shiboooo?is_hot=1) &nbsp; [Download Analysis](https://qii404.me/github-release-statistics/?repo=/qishibo/AnotherRedisDesktopManager/)
+[goanother.com](https://goanother.com/) &nbsp; [Download Analysis](https://qii404.me/github-release-statistics/?repo=/qishibo/AnotherRedisDesktopManager/)
 
 
